@@ -104,8 +104,8 @@ async def skill_choice(message: types.Message):
 # --- ЗАПУСК ---
 async def main():
     scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
-    # ИСПРАВЛЕНО: Тестовое время на 11:55
-    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=11, minute=55, args=(bot,))
+    # ИСПРАВЛЕНО: Тестовое время на 12,05
+    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=12, minute=05, args=(bot,))
     scheduler.start()
     
     asyncio.create_task(self_ping())
@@ -116,5 +116,6 @@ async def main():
 if __name__ == '__main__':
     keep_alive() 
     asyncio.run(main())
+
 
 
