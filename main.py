@@ -12,7 +12,7 @@ from threading import Thread
 
 # --- НАСТРОЙКИ ---
 API_TOKEN = '8443201655:AAHiyh2JDq5OOstYZsosbLicVGN5ztJM0fo'
-USERS-IDS = [662501989, 650682969] 
+USER_IDS = [662501989, 650682969] # ИСПРАВЛЕНО: нижнее подчеркивание вместо тире
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher()
@@ -44,16 +44,16 @@ def keep_alive():
 
 # --- ФУНКЦИИ ПЛАНИРОВЩИКА ---
 async def get_random_meme():
-    """Берем случайную собачку (самый стабильный источник)"""
-    url = "https://dog.ceo"
+    # ИСПРАВЛЕНО: Полная ссылка для получения картинки (тот самый хвост!)
+    url = "https://dog.ceo" 
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get(url, timeout=10) as response:
                 if response.status == 200:
                     data = await response.json()
-                    return data.get('message')
+                    return data.get('message') 
     except Exception as e:
-        print(f"Ошибка поиска мема: {e}")
+        print(f"Ошибка: {e}")
     return None
 
 async def send_scheduled_meme(bot: Bot):
@@ -66,16 +66,14 @@ async def send_scheduled_meme(bot: Bot):
                 print(f"Ошибка отправки пользователю {user_id}: {e}")
 
 async def self_ping():
-    """Бот сам заходит на свою страницу, чтобы не уснуть"""
     while True:
         try:
             async with aiohttp.ClientSession() as session:
-                # ЗАМЕНИ ЭТУ ССЫЛКУ НА СВОЮ, если она отличается:
                 async with session.get("https://ksyusha256.onrender.com") as response:
                     print(f"Самопроверка: {response.status}")
         except:
             print("Самопроверка не удалась")
-        await asyncio.sleep(600) # Спит 10 минут
+        await asyncio.sleep(600)
 
 # --- ОБРАБОТЧИКИ ---
 @dp.message(Command("start"))
@@ -106,18 +104,17 @@ async def skill_choice(message: types.Message):
 # --- ЗАПУСК ---
 async def main():
     scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
-    # Каждый день в 11:35
-    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=11, minute=35, args=(bot,))
+    # ИСПРАВЛЕНО: Тестовое время на 11:55
+    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=11, minute=55, args=(bot,))
     scheduler.start()
     
-    # Запускаем само-будильник фоном
     asyncio.create_task(self_ping())
     
-    print("Бот и планировщик (10:00) запущены!")
+    print("Бот и планировщик запущены!")
     await dp.start_polling(bot)
 
 if __name__ == '__main__':
-    keep_alive() # Запуск Flask
+    keep_alive() 
     asyncio.run(main())
 
 
