@@ -82,7 +82,7 @@ async def skill_choice(message: types.Message):
 async def main():
     scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
     # ТЕСТ НА 12:20 (БЕЗ НУЛЯ ПЕРЕД 20)
-    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=12, minute=20, args=(bot,))
+    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=12, minute=30, args=(bot,))
     scheduler.start()
     asyncio.create_task(self_ping())
     await dp.start_polling(bot)
@@ -90,4 +90,5 @@ async def main():
 if __name__ == '__main__':
     keep_alive()
     asyncio.run(main())
+
 
