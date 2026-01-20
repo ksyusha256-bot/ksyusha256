@@ -12,7 +12,7 @@ from threading import Thread
 
 # --- НАСТРОЙКИ ---
 API_TOKEN = '8443201655:AAHiyh2JDq5OOstYZsosbLicVGN5ztJM0fo'
-MY_ID = 662501989 
+USERS-IDS = [662501989, 650682969] 
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher()
@@ -59,10 +59,11 @@ async def get_random_meme():
 async def send_scheduled_meme(bot: Bot):
     meme_url = await get_random_meme()
     if meme_url:
-        try:
-            await bot.send_photo(chat_id=MY_ID, photo=meme_url, caption="☀️ Доброе утро! Твой ежедневный мем.")
-        except Exception as e:
-            print(f"Ошибка отправки: {e}")
+        for user_id in USER_IDS:
+            try:
+                await bot.send_photo(chat_id=user_id, photo=meme_url, caption="✨ Ежедневный мем для вас!")
+            except Exception as e:
+                print(f"Ошибка отправки пользователю {user_id}: {e}")
 
 async def self_ping():
     """Бот сам заходит на свою страницу, чтобы не уснуть"""
@@ -105,8 +106,8 @@ async def skill_choice(message: types.Message):
 # --- ЗАПУСК ---
 async def main():
     scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
-    # Каждый день в 10:00
-    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=10, minute=0, args=(bot,))
+    # Каждый день в 11:35
+    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=11, minute=35, args=(bot,))
     scheduler.start()
     
     # Запускаем само-будильник фоном
@@ -118,4 +119,5 @@ async def main():
 if __name__ == '__main__':
     keep_alive() # Запуск Flask
     asyncio.run(main())
+
 
