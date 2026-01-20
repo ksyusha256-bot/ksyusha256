@@ -28,15 +28,19 @@ def keep_alive():
     t.start()
 
 async def get_random_meme():
-    # ТУТ ТЕПЕРЬ ПРАВИЛЬНАЯ ССЫЛКА
-    url = "https://dog.ceo/api/breeds/image/random" 
+    # API, которое берет случайные мемы с Reddit
+    url = "https://meme-api.com/gimme" 
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get(url, timeout=10) as response:
                 if response.status == 200:
                     data = await response.json()
-                    return data.get('message')
-    except: return None
+                    # Тут берем поле 'url', так как в этом API ссылка лежит там
+                    return data.get('url')
+    except Exception as e:
+        print(f"Ошибка поиска мема: {e}")
+    return None
+    
 
 async def send_scheduled_meme(bot: Bot):
     meme_url = await get_random_meme()
@@ -81,8 +85,8 @@ async def skill_choice(message: types.Message):
 
 async def main():
     scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
-    # ТЕСТ НА 12:20 (БЕЗ НУЛЯ ПЕРЕД 20)
-    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=12, minute=30, args=(bot,))
+    # ТЕСТ НА 14.00
+    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=14, minute=10, args=(bot,))
     scheduler.start()
     asyncio.create_task(self_ping())
     await dp.start_polling(bot)
@@ -90,5 +94,6 @@ async def main():
 if __name__ == '__main__':
     keep_alive()
     asyncio.run(main())
+
 
 
