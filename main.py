@@ -89,16 +89,20 @@ async def talk(message: types.Message):
 # --- ЗАПУСК ---
 
 async def main():
-    # Планировщик отключен до завтра
-    # scheduler = AsyncIOScheduler()
-    # scheduler.add_job(send_scheduled_meme, "interval", minutes=1, args=(bot,))
-    # scheduler.start()
+    scheduler = AsyncIOScheduler(timezone="Europe/Moscow") # Указываем время по Мск
     
-    print("Бот-помощник запущен! (без планировщика)")
+    # Настройка: каждый день в 12 утра (час=12, минута=0)
+    scheduler.add_job(
+        send_scheduled_meme, 
+        trigger="cron", 
+        hour=12, 
+        minute=0, 
+        args=(bot,)
+    )
+    
+    scheduler.start()
+    print("Планировщик запущен на 12:00!")
+    print("Бот-помощник запущен!")
+    
     await dp.start_polling(bot)
 
-if __name__ == '__main__':
-    try:
-        asyncio.run(main())
-    except KeyboardInterrupt:
-        print("Бот выключен пользователем")
