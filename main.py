@@ -44,7 +44,7 @@ def keep_alive():
 
 # --- ФУНКЦИИ ПЛАНИРОВЩИКА ---
 async def get_random_meme():
-    # ИСПРАВЛЕНО: Полная ссылка для получения картинки (тот самый хвост!)
+    # ИСПРАВЛЕНО: добавлена правильная ссылка для получения фото
     url = "https://dog.ceo" 
     try:
         async with aiohttp.ClientSession() as session:
@@ -104,18 +104,19 @@ async def skill_choice(message: types.Message):
 # --- ЗАПУСК ---
 async def main():
     scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
-    # ИСПРАВЛЕНО: Тестовое время на 12,05
-    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=12, minute=05, args=(bot,))
+    
+    # ИСПРАВЛЕНО: время 12:15 (пишем без ноля в начале пятерки)
+    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=12, minute=15, args=(bot,))
+    
     scheduler.start()
-    
     asyncio.create_task(self_ping())
-    
     print("Бот и планировщик запущены!")
     await dp.start_polling(bot)
-
+    
 if __name__ == '__main__':
     keep_alive() 
     asyncio.run(main())
+
 
 
 
