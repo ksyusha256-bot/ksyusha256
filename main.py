@@ -29,7 +29,7 @@ def keep_alive():
 
 async def get_random_meme():
     # ТУТ ТЕПЕРЬ ПРАВИЛЬНАЯ ССЫЛКА
-    url = "https://dog.ceo" 
+    url = "https://dog.ceo/api/breeds/image/random" 
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get(url, timeout=10) as response:
@@ -90,3 +90,4 @@ async def main():
 if __name__ == '__main__':
     keep_alive()
     asyncio.run(main())
+
