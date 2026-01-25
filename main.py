@@ -30,30 +30,35 @@ def keep_alive():
 async def get_random_meme():
     # Настройки ВК
     VK_TOKEN = 'f1cd8672f1cd8672f1cd867284f2f316d0ff1cdf1cd867298bb898200940aaf45fbe5e9'
-    GROUP_ID = '-460389' # ID группы (обязательно с минусом!). Например, это MDK или выбери свою
+    GROUP_ID = '-460389' 
     
-    url = f"https://api.vk.com{-460389}&count=50&access_token={f1cd8672f1cd8672f1cd867284f2f316d0ff1cdf1cd867298bb898200940aaf45fbe5e9}&v=5.131"
+    # Ссылка должна быть именно такой, с методом wall.get
+    url = f"https://api.vk.com{GROUP_ID}&count=50&access_token={VK_TOKEN}&v=5.131"
     
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:
                 data = await response.json()
+                
+                # Проверка, если ВК вернул ошибку
+                if 'error' in data:
+                    print(f"Ошибка ВК: {data['error']['error_msg']}")
+                    return None
+                    
                 posts = data['response']['items']
                 
-                # Фильтруем посты, чтобы в них была именно картинка
                 images = []
                 for post in posts:
                     if 'attachments' in post:
                         for att in post['attachments']:
                             if att['type'] == 'photo':
-                                # Берем ссылку на самое большое разрешение фото
                                 photo_url = att['photo']['sizes'][-1]['url']
                                 images.append(photo_url)
                 
                 if images:
                     return random.choice(images)
     except Exception as e:
-        print(f"Ошибка ВК: {e}")
+        print(f"Ошибка при запросе к ВК: {e}")
     return None
     
 
@@ -141,6 +146,7 @@ async def main():
     scheduler.start()
     asyncio.create_task(self_ping())
     await dp.start_polling(bot)
+
 
 
 
