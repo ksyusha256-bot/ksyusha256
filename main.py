@@ -32,7 +32,7 @@ async def get_random_meme():
     GROUP_ID = '-460389' 
     
     # ВОТ ИСПРАВЛЕННАЯ ССЫЛКА:
-    url = f"https://api.vk.com{GROUP_ID}&count=50&access_token={VK_TOKEN}&v=5.131"
+    url = f"https://api.vk.com/method/wall.get?owner_id={GROUP_ID}&count=50&access_token={VK_TOKEN}&v=5.131"
     
     try:
         async with aiohttp.ClientSession() as session:
@@ -140,4 +140,6 @@ if __name__ == '__main__':
     keep_alive()
     asyncio.run(main())
 
-
+    git add main.py
+    git commit -m "update bot"
+    git push
