@@ -140,6 +140,4 @@ if __name__ == '__main__':
     keep_alive()
     asyncio.run(main())
 
-    git add main.py
-    git commit -m "update bot"
-    git push
+   
