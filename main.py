@@ -28,17 +28,32 @@ def keep_alive():
     t.start()
 
 async def get_random_meme():
-    # API, которое берет случайные мемы с Reddit
-    url = "https://meme-api.com/gimme" 
+    # Настройки ВК
+    VK_TOKEN = 'f1cd8672f1cd8672f1cd867284f2f316d0ff1cdf1cd867298bb898200940aaf45fbe5e9'
+    GROUP_ID = '-460389' # ID группы (обязательно с минусом!). Например, это MDK или выбери свою
+    
+    url = f"https://api.vk.com{GROUP_ID}&count=50&access_token={VK_TOKEN}&v=5.131"
+    
     try:
         async with aiohttp.ClientSession() as session:
-            async with session.get(url, timeout=10) as response:
-                if response.status == 200:
-                    data = await response.json()
-                    # Тут берем поле 'url', так как в этом API ссылка лежит там
-                    return data.get('url')
+            async with session.get(url) as response:
+                data = await response.json()
+                posts = data['response']['items']
+                
+                # Фильтруем посты, чтобы в них была именно картинка
+                images = []
+                for post in posts:
+                    if 'attachments' in post:
+                        for att in post['attachments']:
+                            if att['type'] == 'photo':
+                                # Берем ссылку на самое большое разрешение фото
+                                photo_url = att['photo']['sizes'][-1]['url']
+                                images.append(photo_url)
+                
+                if images:
+                    return random.choice(images)
     except Exception as e:
-        print(f"Ошибка поиска мема: {e}")
+        print(f"Ошибка ВК: {e}")
     return None
     
 
@@ -114,7 +129,7 @@ async def main():
     scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
     
     # Ежедневный мем
-    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=10, minute=0, args=(bot,))
+    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=16, minute=05, args=(bot,))
     
     # Пять разных напоминалок
     scheduler.add_job(rem_1,  trigger="cron", day="1",  hour=6, minute=0, args=(bot,))
@@ -126,5 +141,6 @@ async def main():
     scheduler.start()
     asyncio.create_task(self_ping())
     await dp.start_polling(bot)
+
 
 
