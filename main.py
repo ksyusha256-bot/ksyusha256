@@ -134,7 +134,7 @@ async def main():
     scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
     
     # Ежедневный мем
-    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=16, minute=09, args=(bot,))
+    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=16, minute=15, args=(bot,))
     
     # Пять разных напоминалок
     scheduler.add_job(rem_1,  trigger="cron", day="1",  hour=6, minute=0, args=(bot,))
@@ -146,6 +146,7 @@ async def main():
     scheduler.start()
     asyncio.create_task(self_ping())
     await dp.start_polling(bot)
+
 
 
 
