@@ -28,25 +28,20 @@ def keep_alive():
     t.start()
 
 async def get_random_meme():
-    # Настройки ВК
     VK_TOKEN = 'f1cd8672f1cd8672f1cd867284f2f316d0ff1cdf1cd867298bb898200940aaf45fbe5e9'
     GROUP_ID = '-460389' 
     
-    # Ссылка должна быть именно такой, с методом wall.get
+    # ВОТ ИСПРАВЛЕННАЯ ССЫЛКА:
     url = f"https://api.vk.com{GROUP_ID}&count=50&access_token={VK_TOKEN}&v=5.131"
     
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:
                 data = await response.json()
-                
-                # Проверка, если ВК вернул ошибку
                 if 'error' in data:
                     print(f"Ошибка ВК: {data['error']['error_msg']}")
                     return None
-                    
                 posts = data['response']['items']
-                
                 images = []
                 for post in posts:
                     if 'attachments' in post:
@@ -54,13 +49,11 @@ async def get_random_meme():
                             if att['type'] == 'photo':
                                 photo_url = att['photo']['sizes'][-1]['url']
                                 images.append(photo_url)
-                
                 if images:
                     return random.choice(images)
     except Exception as e:
         print(f"Ошибка при запросе к ВК: {e}")
     return None
-    
 
 async def send_scheduled_meme(bot: Bot):
     meme_url = await get_random_meme()
@@ -69,8 +62,6 @@ async def send_scheduled_meme(bot: Bot):
             try:
                 await bot.send_photo(chat_id=user_id, photo=meme_url, caption="✨ Ежедневный мем!")
             except: pass
-
-# --- 1. ФУНКЦИИ НАПОМИНАЛОК (Замени ими старые) ---
 
 async def rem_1(bot: Bot):
     try: await bot.send_message(chat_id=650682969, text="🌸 Ксю, сегодня 1-е число! Выбери категории в сберпрайме! Мяу.")
@@ -129,14 +120,12 @@ async def food_choice(message: types.Message):
 async def skill_choice(message: types.Message):
     await message.answer(f"🛠 Идея: {random.choice(skills)}")
 
-
 async def main():
     scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
     
-    # Ежедневный мем
-    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=16, minute=15, args=(bot,))
+    # ТЕСТ: поставил на 16:30, чтобы ты успела загрузить!
+    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=16, minute=30, args=(bot,))
     
-    # Пять разных напоминалок
     scheduler.add_job(rem_1,  trigger="cron", day="1",  hour=6, minute=0, args=(bot,))
     scheduler.add_job(rem_11, trigger="cron", day="11", hour=9, minute=0, args=(bot,))
     scheduler.add_job(rem_12, trigger="cron", day="12", hour=9, minute=0, args=(bot,))
@@ -147,8 +136,8 @@ async def main():
     asyncio.create_task(self_ping())
     await dp.start_polling(bot)
 
-
-
-
+if __name__ == '__main__':
+    keep_alive()
+    asyncio.run(main())
 
 
