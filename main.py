@@ -32,7 +32,7 @@ async def get_random_meme():
     VK_TOKEN = 'f1cd8672f1cd8672f1cd867284f2f316d0ff1cdf1cd867298bb898200940aaf45fbe5e9'
     GROUP_ID = '-460389' # ID группы (обязательно с минусом!). Например, это MDK или выбери свою
     
-    url = f"https://api.vk.com{GROUP_ID}&count=50&access_token={VK_TOKEN}&v=5.131"
+    url = f"https://api.vk.com{-460389}&count=50&access_token={f1cd8672f1cd8672f1cd867284f2f316d0ff1cdf1cd867298bb898200940aaf45fbe5e9}&v=5.131"
     
     try:
         async with aiohttp.ClientSession() as session:
@@ -129,7 +129,7 @@ async def main():
     scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
     
     # Ежедневный мем
-    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=16, minute=05, args=(bot,))
+    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=16, minute=09, args=(bot,))
     
     # Пять разных напоминалок
     scheduler.add_job(rem_1,  trigger="cron", day="1",  hour=6, minute=0, args=(bot,))
@@ -141,6 +141,7 @@ async def main():
     scheduler.start()
     asyncio.create_task(self_ping())
     await dp.start_polling(bot)
+
 
 
 
