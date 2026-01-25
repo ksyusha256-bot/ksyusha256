@@ -50,6 +50,32 @@ async def send_scheduled_meme(bot: Bot):
                 await bot.send_photo(chat_id=user_id, photo=meme_url, caption="✨ Ежедневный мем!")
             except: pass
 
+# --- 1. ФУНКЦИИ НАПОМИНАЛОК (Замени ими старые) ---
+
+async def rem_1(bot: Bot):
+    try: await bot.send_message(chat_id=650682969, text="🌸 Ксю, сегодня 1-е число! Выбери категории в сберпрайме! Мяу.")
+    except: pass
+
+async def rem_11(bot: Bot):
+    for uid in USER_IDS:
+        try: await bot.send_message(chat_id=uid, text="🙄 Сегодня 11-е число йоу! Позвони Изабэле и договорись насчет завтра! ✨🌺🎉")
+        except: pass
+
+async def rem_12(bot: Bot):
+    for uid in USER_IDS:
+        try: await bot.send_message(chat_id=uid, text="📅 Сегодня уже 12-е число епта! Пора позвонить Изабэле и попрощаться с бабками! 😿💔💸 Вот Черт!")
+        except: pass
+
+async def rem_22(bot: Bot):
+    for uid in USER_IDS:
+        try: await bot.send_message(chat_id=uid, text="🤡 Приветики! Напоминаю, что завтра нужно скинуть счетчики за воду и свет! 🥀🌈🏆")
+        except: pass
+
+async def rem_23(bot: Bot):
+    for uid in USER_IDS:
+        try: await bot.send_message(chat_id=uid, text="🗓️ Здарова! Не забудь скинуть счетчики хозяйке и в почтовый ящик. Я же вчера напоминал тебе, ты чего блин? ✨🌙☁️ ")
+        except: pass
+
 async def self_ping():
     while True:
         try:
@@ -83,17 +109,22 @@ async def food_choice(message: types.Message):
 async def skill_choice(message: types.Message):
     await message.answer(f"🛠 Идея: {random.choice(skills)}")
 
+
 async def main():
     scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
-    # ТЕСТ НА 14.00
-    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=14, minute=10, args=(bot,))
+    
+    # Ежедневный мем
+    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=10, minute=0, args=(bot,))
+    
+    # Пять разных напоминалок
+    scheduler.add_job(rem_1,  trigger="cron", day="1",  hour=6, minute=0, args=(bot,))
+    scheduler.add_job(rem_11, trigger="cron", day="11", hour=9, minute=0, args=(bot,))
+    scheduler.add_job(rem_12, trigger="cron", day="12", hour=9, minute=0, args=(bot,))
+    scheduler.add_job(rem_22, trigger="cron", day="22", hour=9, minute=0, args=(bot,))
+    scheduler.add_job(rem_23, trigger="cron", day="23", hour=9, minute=0, args=(bot,))
+    
     scheduler.start()
     asyncio.create_task(self_ping())
     await dp.start_polling(bot)
-
-if __name__ == '__main__':
-    keep_alive()
-    asyncio.run(main())
-
 
 
