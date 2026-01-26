@@ -124,7 +124,7 @@ async def main():
     scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
     
     # ТЕСТ: поставил на 16:30, чтобы ты успела загрузить!
-    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=16, minute=30, args=(bot,))
+    scheduler.add_job(send_scheduled_meme, trigger="cron", hour=15, minute=30, args=(bot,))
     
     scheduler.add_job(rem_1,  trigger="cron", day="1",  hour=6, minute=0, args=(bot,))
     scheduler.add_job(rem_11, trigger="cron", day="11", hour=9, minute=0, args=(bot,))
@@ -141,3 +141,4 @@ if __name__ == '__main__':
     asyncio.run(main())
 
    
+
