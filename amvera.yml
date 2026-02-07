@@ -1,0 +1,9 @@
+yaml
+
+meta:
+  environment: python
+  toolchain:
+    name: pip
+    version: 3.11
+run:
+  script: main.py
