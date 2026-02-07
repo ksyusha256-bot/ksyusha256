@@ -97,28 +97,8 @@ async def self_ping():
 
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
-    builder = ReplyKeyboardBuilder()
-    builder.row(types.KeyboardButton(text="🎬 Что посмотреть?"), types.KeyboardButton(text="🍕 Что же съесть?"))
-    builder.row(types.KeyboardButton(text="💡 Чем заняться?"))
-    await message.answer("Бот в сети! Ждем мем.", reply_markup=builder.as_markup(resize_keyboard=True))
-
-movie_photos = {"Майор Гром": "grom.jpg", "Бумажный дом": "bumazh.jpg", "Шрек": "shrek.jpg", "Очень странные дела": "osd.jpg"}
-food_photos = {"Макарошки с котлетками": "makarons.jpg", "Бутербродики": "buter.jpg", "Печеночный торт": "tort.jpg", "Квашеная капуста": "kkapusta.jpg", "Пакетик хвостика": "korm.jpg", "Бутербродик с шоколадной пастой": "butersladko.jpg"}
-skills = ["Бегит в могазин", "Атжумания", "Пачитат книгу", "Помыть попу", "Покакат", "Покушат", "Поваляца с хвостиком"]
-
-@dp.message(F.text == "🎬 Что посмотреть?")
-async def movie_choice(message: types.Message):
-    try: await message.answer_photo(photo=FSInputFile(movie_photos[random.choice(list(movie_photos.keys()))]))
-    except: await message.answer("Ошибка фото.")
-
-@dp.message(F.text == "🍕 Что же съесть?")
-async def food_choice(message: types.Message):
-    try: await message.answer_photo(photo=FSInputFile(food_photos[random.choice(list(food_photos.keys()))]))
-    except: await message.answer("Ошибка фото.")
-
-@dp.message(F.text == "💡 Чем заняться?")
-async def skill_choice(message: types.Message):
-    await message.answer(f"🛠 Идея: {random.choice(skills)}")
+    # Отправляем команду на удаление кнопок
+    await message.answer("Бот в сети! 🌺 ", reply_markup=types.ReplyKeyboardRemove())
 
 async def main():
     scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
@@ -141,4 +121,5 @@ if __name__ == '__main__':
     asyncio.run(main())
 
    
+
 
