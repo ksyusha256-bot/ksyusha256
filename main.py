@@ -10,7 +10,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from flask import Flask
 from threading import Thread
 
-# --- НАСТРОЙКИ ---
+# --- НАСТРОЙКИ --- !!! ????
 API_TOKEN = '8443201655:AAHiyh2JDq5OOstYZsosbLicVGN5ztJM0fo'
 USER_IDS = [662501989, 650682969] 
 
